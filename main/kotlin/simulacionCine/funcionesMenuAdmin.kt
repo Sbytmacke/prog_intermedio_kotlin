@@ -11,7 +11,7 @@ import simulacionCine.models.Sala
  * @param cine El cine del que se desea obtener información.
  * @param almacenClientes El almacén de clientes.
  */
-fun menuAdmin(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
+fun menuAdmin(cine: Array<Sala>) {
     while (true) {
         portadaCinesAngel()
         println("(ADMIN) -> Selecciona la opción deseada: ")

@@ -55,7 +55,7 @@ fun menuEleccionUsuario(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
                 val passCorrect: String = "1234"
                 if (isPassCorrect(passCorrect)) {
                     falsoBorradoDeConsola()
-                    menuAdmin(cine, almacenClientes)
+                    menuAdmin(cine)
                     break
                 }
             } while (repetir("¿Quieres volver a intentar introducir la contraseña? (S/N):"))

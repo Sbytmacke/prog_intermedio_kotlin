@@ -4,14 +4,19 @@ import simulacionCine.enum.EstadoButaca
 
 
 // Clase que representa una butaca de un cine.
-class Butaca(private var estado: EstadoButaca, private var posicionFila: String, private var posicionColumna: String, private var vip: Boolean) {
+class Butaca(
+    private var estado: EstadoButaca,
+    private var posicionFila: String,
+    private var posicionColumna: String,
+    private var vip: Boolean
+) {
 
     /**
      * Devuelve si la butaca es VIP o no.
      *
      * @return 'true' si la butaca es VIP, 'false' en caso contrario.
      */
-    fun getBooleanButacaVip(): Boolean{
+    fun getBooleanButacaVip(): Boolean {
         return vip
     }
 
@@ -38,10 +43,9 @@ class Butaca(private var estado: EstadoButaca, private var posicionFila: String,
      *
      * @param vip Valor a establecer.
      */
-    fun setBooleanButacaVip(vip: Boolean){
+    fun setBooleanButacaVip(vip: Boolean) {
         this.vip = vip
     }
-
 
     /**
      * Devuelve una cadena con la posición de la butaca y su estado.

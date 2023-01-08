@@ -137,22 +137,6 @@ fun filtradoButacas(cine: Array<Sala>, idSala: String, entradaButaca: String): B
         return false
     }
 
-    // Filtro butaca ya reservada u ocupada
-    // Nos dirigimos a la sala que necesitemos
-    for (i in cine.indices) {
-        if (cine[i].id == idSala) {
-            val estadoButacaParaFiltrar: EstadoButaca = cine[i].getEstadoButacaEspecifica(entradaButaca)
-            if (estadoButacaParaFiltrar == EstadoButaca.OCUPADO) {
-                println("ERROR: La butaca $entradaButaca está ocupada!")
-                return false
-            }
-            if (estadoButacaParaFiltrar == EstadoButaca.RESERVADO) {
-                println("ERROR: La butaca $entradaButaca está reservada!")
-                return false
-            }
-        }
-    }
-
     // COLUMNAS
     // Filtro para ser las columnas siempre números
     val regexColumna = Regex("\\d+")
@@ -184,7 +168,7 @@ fun filtradoButacas(cine: Array<Sala>, idSala: String, entradaButaca: String): B
         return false
     }
     // Filtrado para limitar respecto al tamaño de sala
-    val filaButacaOcupada: Char = entradaButaca[0]
+    val filaButaca: Char = entradaButaca[0]
     val abecedario: String = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
     var contadorFilaSeleccionada: Int = 0
     for (element in abecedario) {
@@ -194,8 +178,24 @@ fun filtradoButacas(cine: Array<Sala>, idSala: String, entradaButaca: String): B
             println("Has asignado una butaca en una posición de fila más grande de la SALA!")
             println("")
             return false
-        } else if (element == filaButacaOcupada && contadorFilaSeleccionada <= cine[0].cantidaMaxFilas()) {
+        } else if (element == filaButaca && contadorFilaSeleccionada <= cine[0].cantidaMaxFilas()) {
             return true
+        }
+    }
+
+    // Filtro butaca ya reservada u ocupada
+    // Nos dirigimos a la sala que necesitemos
+    for (i in cine.indices) {
+        if (cine[i].id == idSala) {
+            val estadoButacaParaFiltrar: EstadoButaca = cine[i].getEstadoButacaEspecifica(entradaButaca)
+            if (estadoButacaParaFiltrar == EstadoButaca.OCUPADO) {
+                println("ERROR: La butaca $entradaButaca está ocupada!")
+                return false
+            }
+            if (estadoButacaParaFiltrar == EstadoButaca.RESERVADO) {
+                println("ERROR: La butaca $entradaButaca está reservada!")
+                return false
+            }
         }
     }
     return false
