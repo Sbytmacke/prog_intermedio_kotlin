@@ -6,8 +6,8 @@ import simulacionCine.models.*
 
 const val PRECIO_ESTANDAR: Double = 5.25
 const val PRECIO_VIP: Double = 8.5
-const val BUTACAS_FILA_MAX: Int = 7
-const val BUTACAS_COLUMNA_MAX: Int = 7
+const val BUTACAS_FILA_MAX: Int = 20
+const val BUTACAS_COLUMNA_MAX: Int = 20
 // BB. DD. volátil de clientes con un tamaño fijo máximo
 const val CLIENTES_MAX: Int = 15
 
@@ -15,7 +15,7 @@ fun main() {
     // Inicialización de las películas que dispongamos
     val catalogoPeliculas: Array<Pelicula> = arrayOf(
         Pelicula("Avatar 2", "2022", "James Cameron", "Ciencia Ficción"),
-        Pelicula("El viaje de Chihiro", "2001", "Hayao Miyazaki", "Anime-Fantasia")
+        Pelicula("El viaje de Chihiro", "2001", "Hayao Miyazaki", "Anime-Fantasia"),
     )
 
     // Inicialización de las salas que dispongamos, con sus correspondientes butacas en estado libre por defecto
@@ -144,6 +144,3 @@ fun volverAlMenu(): Boolean {
     }
     return false
 }
-
-
-

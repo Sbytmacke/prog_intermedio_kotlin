@@ -2,7 +2,6 @@ package simulacionCine.models
 
 import simulacionCine.enum.EstadoButaca
 
-
 // Clase que representa una butaca de un cine.
 class Butaca(
     private var estado: EstadoButaca,

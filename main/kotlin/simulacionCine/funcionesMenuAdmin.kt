@@ -2,14 +2,12 @@ package simulacionCine
 
 import simulacionCine.enum.EstadoButaca
 import simulacionCine.models.Butaca
-import simulacionCine.models.Cliente
 import simulacionCine.models.Sala
 
 /**
  * Muestra un menú para el administrador.
  *
  * @param cine El cine del que se desea obtener información.
- * @param almacenClientes El almacén de clientes.
  */
 fun menuAdmin(cine: Array<Sala>) {
     while (true) {
@@ -40,7 +38,7 @@ fun menuAdmin(cine: Array<Sala>) {
                 falsoBorradoDeConsola()
             }
             // Salir
-            "0" ->{
+            "0" -> {
                 falsoBorradoDeConsola()
                 break
             }
@@ -53,8 +51,8 @@ fun menuAdmin(cine: Array<Sala>) {
  *
  * @param cine El cine del que se desea obtener información.
  */
-fun informeButacas(cine: Array<Sala>){
-    val almacenIDSalaElegida: Array<String> = Array<String> (1){" "}
+fun informeButacas(cine: Array<Sala>) {
+    val almacenIDSalaElegida: Array<String> = Array<String>(1) { " " }
 
     var salirBucle: Boolean = false
     while (!salirBucle) {
@@ -86,15 +84,14 @@ fun informeButacas(cine: Array<Sala>){
     mostrarSala(cine, almacenIDSalaElegida[0])
 
 
-    val salaElegida: Array<Sala> = Array<Sala> (1){cine[0]}
-    for (i in cine.indices){
-        if (cine[i].id == almacenIDSalaElegida[0]){
+    val salaElegida: Array<Sala> = Array<Sala>(1) { cine[0] }
+    for (i in cine.indices) {
+        if (cine[i].id == almacenIDSalaElegida[0]) {
             salaElegida[0] = cine[i]
         }
     }
 
     val sala: Array<Array<Butaca>> = salaElegida[0].getMatrizSala()
-    // Y a partir de ahí hacer informe: 1 SALA = 10 butacas compradas (2VIP y 8 NO VIP)
 
     var contadorButacasLibres: Int = 0
     var contadorButacasLibresVIP: Int = 0
@@ -103,30 +100,30 @@ fun informeButacas(cine: Array<Sala>){
     var contadorButacasOcupadas: Int = 0
     var contadorButacasOcupadasVIP: Int = 0
 
-    for (filas in sala.indices){
-        for ( columnas in 0 until sala[filas].size){
+    for (filas in sala.indices) {
+        for (columnas in 0 until sala[filas].size) {
             // Si es ESTÁNDAR libres
-            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.LIBRE && !sala[filas][columnas].getBooleanButacaVip()){
+            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.LIBRE && !sala[filas][columnas].getBooleanButacaVip()) {
                 contadorButacasLibres += 1
             }
             // Si es VIP libres
-            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.LIBRE && sala[filas][columnas].getBooleanButacaVip()){
+            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.LIBRE && sala[filas][columnas].getBooleanButacaVip()) {
                 contadorButacasLibresVIP += 1
             }
             // Si es ESTÁNDAR reservadas
-            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.RESERVADO && !sala[filas][columnas].getBooleanButacaVip()){
+            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.RESERVADO && !sala[filas][columnas].getBooleanButacaVip()) {
                 contadorButacasReservadas += 1
             }
             // Si es VIP reservadas
-            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.RESERVADO && sala[filas][columnas].getBooleanButacaVip()){
+            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.RESERVADO && sala[filas][columnas].getBooleanButacaVip()) {
                 contadorButacasReservadasVIP += 1
             }
             // Si es ESTÁNDAR ocupadas
-            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && !sala[filas][columnas].getBooleanButacaVip()){
+            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && !sala[filas][columnas].getBooleanButacaVip()) {
                 contadorButacasOcupadas += 1
             }
             // Si es VIP ocupadas
-            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && sala[filas][columnas].getBooleanButacaVip()){
+            if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && sala[filas][columnas].getBooleanButacaVip()) {
                 contadorButacasOcupadasVIP += 1
             }
 
@@ -149,22 +146,22 @@ fun informeButacas(cine: Array<Sala>){
  *
  * @param cine Array de objetos Sala con las salas del cine
  */
-fun informeRecaudacionTotal(cine: Array<Sala>){
+fun informeRecaudacionTotal(cine: Array<Sala>) {
     var contadorButacasVIP: Int = 0
     var contadorButacasNoVIP: Int = 0
 
     // Tenemos que recorrer cada sala del cine
-    for (i in cine.indices){
+    for (i in cine.indices) {
         var sala: Array<Array<Butaca>> = cine[i].getMatrizSala()
         // Recorremos cada sala
-        for ( filas in sala.indices){
-            for ( columnas in 0 until sala[filas].size){
+        for (filas in sala.indices) {
+            for (columnas in 0 until sala[filas].size) {
                 // Si es VIP
-                if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && sala[filas][columnas].getBooleanButacaVip()){
+                if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && sala[filas][columnas].getBooleanButacaVip()) {
                     contadorButacasVIP += 1
                 }
                 // Si no es VIP
-                if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && !sala[filas][columnas].getBooleanButacaVip()){
+                if (sala[filas][columnas].getEstadoButaca() == EstadoButaca.OCUPADO && !sala[filas][columnas].getBooleanButacaVip()) {
                     contadorButacasNoVIP += 1
                 }
             }
@@ -172,7 +169,7 @@ fun informeRecaudacionTotal(cine: Array<Sala>){
     }
 
     val totalVIP: Double = contadorButacasVIP * PRECIO_VIP
-    val totalNoVIP: Double = contadorButacasNoVIP* PRECIO_ESTANDAR
+    val totalNoVIP: Double = contadorButacasNoVIP * PRECIO_ESTANDAR
     val totalFinal: Double = totalVIP + totalNoVIP
     println("====================Informe de CAJA FINAL=======================")
     println("Recaudación butacas ESTÁNDAR ($contadorButacasNoVIP) -> $totalNoVIP€ ")
@@ -187,14 +184,14 @@ fun informeRecaudacionTotal(cine: Array<Sala>){
  * @param passCorrect La contraseña correcta a comparar.
  * @return "true" si la contraseña es correcta, "false" si no lo es.
  */
-fun isPassCorrect(passCorrect:String): Boolean {
+fun isPassCorrect(passCorrect: String): Boolean {
     while (true) {
         println("Introduzca la contraseña:")
         val entradaInicioSesion: String = readln()
         if (entradaInicioSesion == passCorrect) {
             falsoBorradoDeConsola()
             return true
-        }else{
+        } else {
             println("Contraseña incorrecta!")
             Thread.sleep(1500)
             falsoBorradoDeConsola()

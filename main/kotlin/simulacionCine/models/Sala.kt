@@ -32,7 +32,7 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
     private fun generarButacasVIP(){
         // 2 de cada 5 butacas son VIP
         val cantidadTotalButacas: Int = tamannoFila * tamannoColumna
-        val butacasVip: Int = ((cantidadTotalButacas / 5)*2).toInt()
+        val butacasVip: Int = ((cantidadTotalButacas / 5)*2)
         val probabilidadButacaVip: Int = 40
 
         // Si no hay el total de butacasVIP, en nuestra SALA, el bucle infinito asignará hasta que haya el número de VIP deseado
@@ -42,7 +42,7 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
 
             for (filas in matrizButacas.indices) {
                 for (columnas in 0 until matrizButacas[filas].size) {
-                    var sorteoVip: Int = (1..100).random()
+                    val sorteoVip: Int = (1..100).random()
                     if ( sorteoVip <= probabilidadButacaVip){
                         matrizButacas[filas][columnas].setBooleanButacaVip(true)
                     }
@@ -291,6 +291,3 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
                 "\n$pelicula"
     }
 }
-
-
-
