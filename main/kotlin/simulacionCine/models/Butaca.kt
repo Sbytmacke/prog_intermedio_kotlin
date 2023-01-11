@@ -1,5 +1,6 @@
 package simulacionCine.models
 
+import simulacionCine.enum.Color
 import simulacionCine.enum.EstadoButaca
 
 // Clase que representa una butaca de un cine.
@@ -57,13 +58,13 @@ class Butaca(
      */
     override fun toString(): String {
         if (estado == EstadoButaca.LIBRE) {
-            return "$posicionFila$posicionColumna:L"
+            return "$posicionFila$posicionColumna:${Color.GREEN.color}L${Color.RESET.color}"
         }
         if (estado == EstadoButaca.RESERVADO) {
-            return "$posicionFila$posicionColumna:R"
+            return "$posicionFila$posicionColumna:${Color.LIGHT_YELLOW.color}R${Color.RESET.color}"
         }
         if (estado == EstadoButaca.OCUPADO) {
-            return "$posicionFila$posicionColumna:O"
+            return "$posicionFila$posicionColumna:${Color.LIGHT_RED.color}O${Color.RESET.color}"
         }
         return "$posicionFila$posicionColumna:error"
     }

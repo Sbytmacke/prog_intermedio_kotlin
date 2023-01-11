@@ -1,10 +1,18 @@
 package simulacionCine.models
 
+import simulacionCine.enum.Color
 import simulacionCine.enum.EstadoButaca
 
 // Clase que representa una sala de cine.
-class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, private var tamannoFila: Int, private var tamannoColumna: Int) {
-    // La mantengo fuera del init para que todas las funciones tengan acceso a la matriz
+class Sala(
+    var id: String,
+    private var nombre: String,
+    var pelicula: Pelicula,
+    private var tamannoFila: Int,
+    private var tamannoColumna: Int,
+    val cantidadButacasVip: Int
+) {
+    // La mantengo fuera del init para que todas las funciones de Sala tengan acceso a la matriz
     private val matrizButacas: Array<Array<Butaca>>
 
     /**
@@ -13,37 +21,64 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
      * También asigna aleatoriamente butacas VIP en la matriz.
      */
     init {
-        val butacaMain: Butaca = Butaca(EstadoButaca.LIBRE, "A", "0",false)
+        val butacaMain: Butaca = Butaca(EstadoButaca.LIBRE, "A", "0", false)
         matrizButacas = Array(tamannoFila) { Array(tamannoColumna) { butacaMain } }
-        generarButacasVIP()
+        generarButacas(cantidadButacasVip)
     }
 
     /**
      * Devuelve la matriz de butacas de la sala.
      * @return La matriz de butacas de la sala.
      */
-    fun getMatrizSala(): Array<Array<Butaca>>{
+    fun getMatrizSala(): Array<Array<Butaca>> {
         return matrizButacas
     }
 
     /**
-     * Asigna aleatoriamente butacas VIP en la matriz de butacas de la sala.
+     * Asignar butacas en función de los argumentos de entrada que nos lleguen.
      */
-    private fun generarButacasVIP(){
+    private fun generarButacas(butacasVip: Int) {
+
+        // Para el caso que no tengamos ninguna butaca VIP, simplemente asignamos el resto de butacas estándar
+        if (butacasVip == 0) {
+            asignarPosicionesButacasPorDefecto()
+
+        }
+        // Si no hay el total de butacasVIP, en nuestra SALA, el bucle infinito asignará hasta que haya el número de VIP deseado
+        while (!verificarCalculoButacasVip(butacasVip)) {
+            // Asignamos por defecto todas libres con su posición correspondiente
+            asignarPosicionesButacasPorDefecto()
+
+            for (filas in matrizButacas.indices) {
+                for (columnas in 0 until matrizButacas[filas].size) {
+                    val sorteoVip: Int = (1..5).random()
+                    if (sorteoVip == 1) {
+                        matrizButacas[filas][columnas].setBooleanButacaVip(true)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Asigna aleatoriamente butacas VIP en la matriz de butacas de la sala, nosotros definiendo el filtro.
+     * Por si acaso requerimos de un filtro especial de cuantas butacas asignar en el cine.
+     */
+    private fun generarButacasfiltradoPersonal() {
         // 2 de cada 5 butacas son VIP
         val cantidadTotalButacas: Int = tamannoFila * tamannoColumna
-        val butacasVip: Int = ((cantidadTotalButacas / 5)*2)
+        val butacasVip: Int = ((cantidadTotalButacas / 5) * 2)
         val probabilidadButacaVip: Int = 40
 
         // Si no hay el total de butacasVIP, en nuestra SALA, el bucle infinito asignará hasta que haya el número de VIP deseado
-        while(!verificarCalculoButacasVip(butacasVip)){
+        while (!verificarCalculoButacasVip(butacasVip)) {
             // Asignamos por defecto todas libres con su posición correspondiente
             asignarPosicionesButacasPorDefecto()
 
             for (filas in matrizButacas.indices) {
                 for (columnas in 0 until matrizButacas[filas].size) {
                     val sorteoVip: Int = (1..100).random()
-                    if ( sorteoVip <= probabilidadButacaVip){
+                    if (sorteoVip <= probabilidadButacaVip) {
                         matrizButacas[filas][columnas].setBooleanButacaVip(true)
                     }
                 }
@@ -61,12 +96,12 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
 
         for (filas in matrizButacas.indices) {
             for (columnas in 0 until matrizButacas[filas].size) {
-                if (matrizButacas[filas][columnas].getBooleanButacaVip()){
+                if (matrizButacas[filas][columnas].getBooleanButacaVip()) {
                     contadorButacasVip += 1
                 }
             }
         }
-        if (contadorButacasVip == butacasVipLimite){
+        if (contadorButacasVip == butacasVipLimite) {
             return true
         }
         return false
@@ -105,7 +140,7 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
      * y Columna es un número entero.
      * @return 'true' si la butaca es VIP, 'false' en caso contrario.
      */
-    fun getBooleanButacaVipDesdeSala(entradaButacaPosicion: String): Boolean{
+    fun getBooleanButacaVipDesdeSala(entradaButacaPosicion: String): Boolean {
         val columnaButaca: Int = (entradaButacaPosicion.substring(1, 2).toInt())
         val filaButaca: Char = entradaButacaPosicion[0]
 
@@ -126,7 +161,7 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
      * Devuelve la cantidad máxima de filas de butacas en la sala.
      * @return El número máximo de filas de butacas en la sala.
      */
-    fun cantidaMaxFilas(): Int {
+    fun getTamannoMaxFilas(): Int {
         return matrizButacas.size
     }
 
@@ -134,7 +169,7 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
      * Devuelve la cantidad máxima de columnas de butacas en la sala.
      * @return El número máximo de columnas de butacas en la sala.
      */
-    fun cantidaMaxColumnas(): Int {
+    fun getTamannoMaxColumnas(): Int {
         return matrizButacas[0].size
     }
 
@@ -176,7 +211,12 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
         }
 
         val butacaActualizada: Butaca =
-            Butaca(EstadoButaca.LIBRE, "$filaButaca", "$columnaButaca", matrizButacas[filaButacaEnNumero[0]][columnaButaca - 1].getBooleanButacaVip())
+            Butaca(
+                EstadoButaca.LIBRE,
+                "$filaButaca",
+                "$columnaButaca",
+                matrizButacas[filaButacaEnNumero[0]][columnaButaca - 1].getBooleanButacaVip()
+            )
         // En la posición donde se encontraba la butaca introducimos la nueva libre
         matrizButacas[filaButacaEnNumero[0]][columnaButaca - 1] = butacaActualizada
     }
@@ -205,7 +245,12 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
         }
 
         val butacaActualizada: Butaca =
-            Butaca(EstadoButaca.RESERVADO, "$filaButacaReservada", "$columnaButacaReservada",matrizButacas[filaButacaEnNumero[0]][columnaButacaReservada - 1].getBooleanButacaVip())
+            Butaca(
+                EstadoButaca.RESERVADO,
+                "$filaButacaReservada",
+                "$columnaButacaReservada",
+                matrizButacas[filaButacaEnNumero[0]][columnaButacaReservada - 1].getBooleanButacaVip()
+            )
         // En la posición donde se encontraba la butaca introducimos la nueva reservada
         matrizButacas[filaButacaEnNumero[0]][columnaButacaReservada - 1] = butacaActualizada
     }
@@ -234,7 +279,12 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
         }
 
         val butacaActualizada: Butaca =
-            Butaca(EstadoButaca.OCUPADO, "$filaButacaOcupada", "$columnaButacaOcupada",matrizButacas[filaButacaEnNumero[0]][columnaButacaOcupada - 1].getBooleanButacaVip())
+            Butaca(
+                EstadoButaca.OCUPADO,
+                "$filaButacaOcupada",
+                "$columnaButacaOcupada",
+                matrizButacas[filaButacaEnNumero[0]][columnaButacaOcupada - 1].getBooleanButacaVip()
+            )
         // En la posición donde se encontraba la butaca introducimos la nueva ocupada
         matrizButacas[filaButacaEnNumero[0]][columnaButacaOcupada - 1] = butacaActualizada
     }
@@ -248,7 +298,8 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
         // Introducimos las butacas con su correspondiente posición
         for (filas in matrizButacas.indices) {
             for (columnas in 0 until matrizButacas[filas].size) {
-                val butacaPorDefecto: Butaca = Butaca(EstadoButaca.LIBRE, "${abecedario[filas]}", "${columnas + 1}",false)
+                val butacaPorDefecto: Butaca =
+                    Butaca(EstadoButaca.LIBRE, "${abecedario[filas]}", "${columnas + 1}", false)
                 matrizButacas[filas][columnas] = butacaPorDefecto
             }
         }
@@ -258,27 +309,25 @@ class Sala(var id: String, private var nombre: String, var pelicula: Pelicula, p
      * Muestra por pantalla la matriz de butacas de la sala.
      */
     fun imprimirMatrizButacas() {
-        val purple = "\u001b[35m"
-        val reset = "\u001b[0m"
         for (filas in matrizButacas.indices) {
             for (columnas in 0 until matrizButacas[filas].size) {
                 if (columnas == matrizButacas[filas].size - 1) {
-                    if (matrizButacas[filas][columnas].getBooleanButacaVip()){
-                        println("$purple${matrizButacas[filas][columnas]}$reset ")
-                    }else{
+                    if (matrizButacas[filas][columnas].getBooleanButacaVip()) {
+                        println("${Color.LIGHT_MAGENTA.color}${matrizButacas[filas][columnas]}${Color.RESET.color} ")
+                    } else {
                         println("${matrizButacas[filas][columnas]} ")
                     }
                 } else {
                     if (matrizButacas[filas][columnas].getBooleanButacaVip()) {
-                        print("$purple${matrizButacas[filas][columnas]}$reset ")
-                    }else{
+                        print("${Color.LIGHT_MAGENTA.color}${matrizButacas[filas][columnas]}${Color.RESET.color} ")
+                    } else {
                         print("${matrizButacas[filas][columnas]} ")
                     }
                 }
             }
         }
         println("----------------------------------")
-        println("LEYENDA: L -> (libre), R -> (reservado), O -> (ocupado), ${purple}MORADO${reset} -> (VIP)")
+        println("LEYENDA: ${Color.LIGHT_GREEN.color}L${Color.RESET.color} -> (libre), ${Color.LIGHT_YELLOW.color}R${Color.RESET.color} -> (reservado), ${Color.LIGHT_RED.color}O${Color.RESET.color} -> (ocupado), ${Color.LIGHT_MAGENTA.color}MORADO${Color.RESET.color} -> (VIP)")
         println("")
     }
 

@@ -1,5 +1,6 @@
 package simulacionCine
 
+import simulacionCine.enum.Color
 import simulacionCine.enum.EstadoButaca
 import simulacionCine.models.Butaca
 import simulacionCine.models.Sala
@@ -12,7 +13,7 @@ import simulacionCine.models.Sala
 fun menuAdmin(cine: Array<Sala>) {
     while (true) {
         portadaCinesAngel()
-        println("(ADMIN) -> Selecciona la opción deseada: ")
+        println("(${Color.LIGHT_MAGENTA.color}ADMIN${Color.RESET.color}) -> Selecciona la opción deseada: ")
         println("")
         println("1: Informe de butacas (libres, reservadas y ocupadas)")
         println("2: Recaudación total (caja final de las butacas compradas/ocupadas)")
@@ -129,15 +130,15 @@ fun informeButacas(cine: Array<Sala>) {
 
         }
     }
-    println("====================Informe SALA ${salaElegida[0].id}=======================")
-    println("Butacas ESTÁNDAR libres -> ($contadorButacasLibres)")
-    println("Butacas VIP libres ->  ($contadorButacasLibresVIP)")
+    println("====================${Color.LIGHT_CYAN.color}Informe SALA ${salaElegida[0].id}${Color.RESET.color}=======================")
+    println("Butacas ${Color.GREEN.color}ESTÁNDAR libres${Color.RESET.color} -> (${Color.GREEN.color}$contadorButacasLibres${Color.RESET.color})")
+    println("Butacas ${Color.LIGHT_MAGENTA.color}VIP libres${Color.RESET.color} ->  (${Color.LIGHT_MAGENTA.color}$contadorButacasLibresVIP${Color.RESET.color})")
     println("")
-    println("Butacas ESTÁNDAR reservadas -> ($contadorButacasReservadas)")
-    println("Butacas VIP reservadas ->  ($contadorButacasReservadasVIP)")
+    println("Butacas ${Color.LIGHT_YELLOW.color}ESTÁNDAR reservadas${Color.RESET.color} -> (${Color.LIGHT_YELLOW.color}$contadorButacasReservadas${Color.RESET.color})")
+    println("Butacas ${Color.LIGHT_MAGENTA.color}VIP reservadas${Color.RESET.color} -> (${Color.LIGHT_MAGENTA.color}$contadorButacasReservadasVIP${Color.RESET.color})")
     println("")
-    println("Butacas ESTÁNDAR ocupadas ->($contadorButacasOcupadas)")
-    println("Butacas VIP ocupadas ->  ($contadorButacasOcupadasVIP)")
+    println("Butacas ${Color.LIGHT_RED.color}ESTÁNDAR ocupadas${Color.RESET.color} -> (${Color.LIGHT_RED.color}$contadorButacasOcupadas${Color.RESET.color})")
+    println("Butacas ${Color.LIGHT_MAGENTA.color}VIP ocupadas${Color.RESET.color} ->  (${Color.LIGHT_MAGENTA.color}$contadorButacasOcupadasVIP${Color.RESET.color})")
     println("=========================================================")
 }
 
@@ -171,10 +172,10 @@ fun informeRecaudacionTotal(cine: Array<Sala>) {
     val totalVIP: Double = contadorButacasVIP * PRECIO_VIP
     val totalNoVIP: Double = contadorButacasNoVIP * PRECIO_ESTANDAR
     val totalFinal: Double = totalVIP + totalNoVIP
-    println("====================Informe de CAJA FINAL=======================")
-    println("Recaudación butacas ESTÁNDAR ($contadorButacasNoVIP) -> $totalNoVIP€ ")
-    println("Recaudación butacas VIP ($contadorButacasVIP) -> $totalVIP€ ")
-    println("Recaudación TOTAL -> $totalFinal€ ")
+    println("====================${Color.LIGHT_CYAN.color}Informe de CAJA FINAL${Color.RESET.color}=======================")
+    println("Recaudación butacas ${Color.BLUE.color}ESTÁNDAR${Color.RESET.color} (${Color.BLUE.color}$contadorButacasNoVIP${Color.RESET.color}) -> ${Color.BLUE.color}$totalNoVIP€${Color.RESET.color} ")
+    println("Recaudación butacas ${Color.LIGHT_MAGENTA.color}VIP${Color.RESET.color} (${Color.LIGHT_MAGENTA.color}$contadorButacasVIP${Color.RESET.color}) -> ${Color.LIGHT_MAGENTA.color}$totalVIP€${Color.RESET.color} ")
+    println("Recaudación ${Color.LIGHT_CYAN.color}TOTAL${Color.RESET.color} -> ${Color.LIGHT_CYAN.color}$totalFinal€${Color.RESET.color} ")
     println("================================================================")
 }
 

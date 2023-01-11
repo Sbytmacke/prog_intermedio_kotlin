@@ -1,5 +1,6 @@
 package simulacionCine
 
+import simulacionCine.enum.Color
 import simulacionCine.enum.EstadoButaca
 import simulacionCine.enum.EstadoTicket
 import simulacionCine.models.Butaca
@@ -16,7 +17,7 @@ import simulacionCine.models.Ticket
 fun menuCliente(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
     while (true) {
         portadaCinesAngel()
-        println("(USUARIO) -> Selecciona la opción deseada: ")
+        println("(${Color.LIGHT_YELLOW.color}USUARIO${Color.RESET.color}) -> Selecciona la opción deseada: ")
         println("")
         println("1: Mostrar cine completo (salas/películas/butacas)")
         println("2: Comprar entrada (Compra directa)")
@@ -107,7 +108,7 @@ fun buscarInformacionClientes(almacenClientes: Array<Cliente>) {
  */
 fun anularCompra(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
     do {
-        existenciaCompraParaAnular(cine,almacenClientes)
+        existenciaCompraParaAnular(cine, almacenClientes)
     } while (repetir("¿Quieres volver a realizar una búsqueda (S/N)?"))
 }
 
@@ -126,7 +127,7 @@ fun existenciaCompraParaAnular(cine: Array<Sala>, almacenClientes: Array<Cliente
             if (almacenClientes[i].email == entradaUsuario) {
                 println(almacenClientes[i])
                 println(almacenClientes[i].informacionTicket)
-                anularUnaCompra(cine,almacenClientes, i)
+                anularUnaCompra(cine, almacenClientes, i)
                 break
             }
             if (almacenClientes[i].dni == entradaUsuario) {
@@ -166,8 +167,8 @@ fun anularUnaCompra(cine: Array<Sala>, almacenClientes: Array<Cliente>, posicion
         // Cambiamos el estado de la/s butaca/s a libre/s
         val salaParaActualizar: String = almacenClientes[posicionCliente].informacionTicket.salaID
         val posicionButacasParaActualizar: Array<Butaca> = almacenClientes[posicionCliente].informacionTicket.butacas
-        for (i in cine.indices){
-            if (cine[i].id == salaParaActualizar){
+        for (i in cine.indices) {
+            if (cine[i].id == salaParaActualizar) {
                 for (k in posicionButacasParaActualizar.indices) {
                     cine[i].liberarButaca(posicionButacasParaActualizar[k].getPosicionCompletaButaca())
                 }
@@ -178,7 +179,14 @@ fun anularUnaCompra(cine: Array<Sala>, almacenClientes: Array<Cliente>, posicion
             Cliente(" ", " ", " ", " ", " ", " ",
                 Ticket(
                     EstadoTicket.INACTIVO, " ", " ", " ",
-                    Array(BUTACAS_FILA_MAX * BUTACAS_COLUMNA_MAX) { Butaca(EstadoButaca.LIBRE, "A", "0",false) }
+                    Array(cine[0].getTamannoMaxFilas() * cine[0].getTamannoMaxColumnas()) {
+                        Butaca(
+                            EstadoButaca.LIBRE,
+                            "A",
+                            "0",
+                            false
+                        )
+                    }
                 )
             )
         almacenClientes[posicionCliente] = usuarioClientePorDefecto
@@ -194,7 +202,7 @@ fun anularUnaCompra(cine: Array<Sala>, almacenClientes: Array<Cliente>, posicion
  */
 fun anularReserva(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
     do {
-        existenciaReservaParaAnular(cine,almacenClientes)
+        existenciaReservaParaAnular(cine, almacenClientes)
     } while (repetir("¿Quieres volver a realizar una búsqueda (S/N)?"))
 }
 
@@ -213,21 +221,21 @@ fun existenciaReservaParaAnular(cine: Array<Sala>, almacenClientes: Array<Client
             if (almacenClientes[i].email == entradaUsuario) {
                 println(almacenClientes[i])
                 println(almacenClientes[i].informacionTicket)
-                anularUnaReserva(cine,almacenClientes, i)
+                anularUnaReserva(cine, almacenClientes, i)
                 encontrado = true
                 break
             }
             if (almacenClientes[i].dni == entradaUsuario) {
                 println(almacenClientes[i])
                 println(almacenClientes[i].informacionTicket)
-                anularUnaReserva(cine,almacenClientes, i)
+                anularUnaReserva(cine, almacenClientes, i)
                 encontrado = true
                 break
             }
             if (almacenClientes[i].informacionTicket.ticketIDstring() == entradaUsuario) {
                 println(almacenClientes[i])
                 println(almacenClientes[i].informacionTicket)
-                anularUnaReserva(cine,almacenClientes, i)
+                anularUnaReserva(cine, almacenClientes, i)
                 encontrado = true
                 break
             }
@@ -252,8 +260,8 @@ fun anularUnaReserva(cine: Array<Sala>, almacenClientes: Array<Cliente>, posicio
         // Cambiamos el estado de la/s butaca/s a libre/s
         val salaParaActualizar: String = almacenClientes[posicionCliente].informacionTicket.salaID
         val posicionButacasParaActualizar: Array<Butaca> = almacenClientes[posicionCliente].informacionTicket.butacas
-        for (i in cine.indices){
-            if (cine[i].id == salaParaActualizar){
+        for (i in cine.indices) {
+            if (cine[i].id == salaParaActualizar) {
                 for (k in posicionButacasParaActualizar.indices) {
                     cine[i].liberarButaca(posicionButacasParaActualizar[k].getPosicionCompletaButaca())
                 }
@@ -265,7 +273,14 @@ fun anularUnaReserva(cine: Array<Sala>, almacenClientes: Array<Cliente>, posicio
             Cliente(" ", " ", " ", " ", " ", " ",
                 Ticket(
                     EstadoTicket.INACTIVO, " ", " ", " ",
-                    Array(BUTACAS_FILA_MAX * BUTACAS_COLUMNA_MAX) { Butaca(EstadoButaca.LIBRE, "A", "0",false) }
+                    Array(cine[0].getTamannoMaxFilas() * cine[0].getTamannoMaxColumnas()) {
+                        Butaca(
+                            EstadoButaca.LIBRE,
+                            "A",
+                            "0",
+                            false
+                        )
+                    }
                 )
             )
         almacenClientes[posicionCliente] = usuarioClientePorDefecto
@@ -477,7 +492,7 @@ fun demostrarInformacionGeneral(almacenClientes: Array<Cliente>) {
  */
 fun seleccionButacasReservadas(cine: Array<Sala>, idSala: String, cantidadEntradas: String): Array<Butaca> {
     val almacenSeleccionButacas: Array<Butaca> =
-        Array(cantidadEntradas.toInt()) { Butaca(EstadoButaca.LIBRE, "A", "0",false) }
+        Array(cantidadEntradas.toInt()) { Butaca(EstadoButaca.LIBRE, "A", "0", false) }
     var contadorButaca: Int = 1
     repeat(cantidadEntradas.toInt()) {
 
@@ -525,7 +540,7 @@ fun seleccionButacasReservadas(cine: Array<Sala>, idSala: String, cantidadEntrad
  */
 fun seleccionButacasOcupadas(cine: Array<Sala>, idSala: String, cantidadEntradas: String): Array<Butaca> {
     val almacenSeleccionButacas: Array<Butaca> =
-        Array(cantidadEntradas.toInt()) { Butaca(EstadoButaca.LIBRE, "A", "0",false) }
+        Array(cantidadEntradas.toInt()) { Butaca(EstadoButaca.LIBRE, "A", "0", false) }
     var contadorButaca: Int = 1
     repeat(cantidadEntradas.toInt()) {
 
@@ -732,10 +747,10 @@ fun reservarEntrada(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
     // Vemos si son VIP o no nuestras butacas para calcular su precio:
     var contadorButacasVIP: Int = 0
     var contadorButacasEstandar: Int = 0
-    for (i in seleccionButacas.indices){
-        if(seleccionButacas[i].getBooleanButacaVip()){
+    for (i in seleccionButacas.indices) {
+        if (seleccionButacas[i].getBooleanButacaVip()) {
             contadorButacasVIP += 1
-        }else{
+        } else {
             contadorButacasEstandar += 1
         }
     }
@@ -903,10 +918,10 @@ fun comprarEntrada(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
     // Vemos si son VIP o no nuestras butacas para calcular su precio:
     var contadorButacasVIP: Int = 0
     var contadorButacasEstandar: Int = 0
-    for (i in seleccionButacas.indices){
-        if(seleccionButacas[i].getBooleanButacaVip()){
+    for (i in seleccionButacas.indices) {
+        if (seleccionButacas[i].getBooleanButacaVip()) {
             contadorButacasVIP += 1
-        }else{
+        } else {
             contadorButacasEstandar += 1
         }
     }

@@ -1,40 +1,116 @@
 package simulacionCine
 
+import simulacionCine.enum.Color
 import simulacionCine.enum.EstadoButaca
 import simulacionCine.enum.EstadoTicket
 import simulacionCine.models.*
+import kotlin.system.exitProcess
 
 const val PRECIO_ESTANDAR: Double = 5.25
 const val PRECIO_VIP: Double = 8.5
-const val BUTACAS_FILA_MAX: Int = 20
-const val BUTACAS_COLUMNA_MAX: Int = 20
+
 // BB. DD. volátil de clientes con un tamaño fijo máximo
 const val CLIENTES_MAX: Int = 15
 
-fun main() {
-    // Inicialización de las películas que dispongamos
+fun main(args: Array<String>) {
+    
+    // Control de argumentos iniciales
+    // Comentar esta sección para ejecutar sin argumentos...
+    // ===========================
+    if (args.isEmpty()) {
+        salirPrograma()
+    }
+    if (args[0] != "-fila") {
+        salirPrograma()
+    }
+    if (args[2] != "-columna") {
+        salirPrograma()
+    }
+    if (args[4] != "-vip") {
+        salirPrograma()
+    }
+    // ===========================
+
+    // En la sección de valores, asignar unos por defecto en caso de no querer argumentos...
+    // ===========================
+    val filasMax = args[1].toIntOrNull() // Valor por defecto, ejemplo: 6
+    val columnasMax = args[3].toIntOrNull() // Valor por defecto, ejemplo: 6
+    val cantidadButacasVip = args[5].toIntOrNull() // Valor por defecto, ejemplo: 15
+    // ===========================
+
+
+    if (filasMax == null) {
+        salirPrograma()
+    }
+    if (filasMax != null && filasMax > 27) {
+        salirPrograma()
+    }
+    // Mínimo puede haber una fila
+    if (filasMax != null && filasMax < 1) {
+        salirPrograma()
+    }
+    if (columnasMax == null) {
+        salirPrograma()
+    }
+    // Mínimo puede haber una columna
+    if (columnasMax != null && columnasMax < 1) {
+        salirPrograma()
+    }
+    if (cantidadButacasVip == null) {
+        salirPrograma()
+    }
+    // Mínima butaca VIP siendo cero
+    if (cantidadButacasVip != null && cantidadButacasVip < 0) {
+        salirPrograma()
+    }
+    // Máximo de butacas VIP son el máximo de butacas en una sala
+    val maxButacasVip: Int = filasMax!! * columnasMax!!
+    if ((cantidadButacasVip != null) && (cantidadButacasVip > maxButacasVip)) {
+        salirPrograma()
+    }
+    // Si supera el filtro de argumentos se ejecutará el programa...
+
+    // Inicialización de las películas que dispongamos, y por si queremos introducir más películas.
     val catalogoPeliculas: Array<Pelicula> = arrayOf(
         Pelicula("Avatar 2", "2022", "James Cameron", "Ciencia Ficción"),
         Pelicula("El viaje de Chihiro", "2001", "Hayao Miyazaki", "Anime-Fantasia"),
     )
 
-    // Inicialización de las salas que dispongamos, con sus correspondientes butacas en estado libre por defecto
+    // Inicialización de las salas que dispongamos, con sus correspondientes butacas en estado libre por defecto,
+    // y por si queremos generar más salas.
     val cine: Array<Sala> = arrayOf(
-        Sala("001", "Sala 1", catalogoPeliculas[0], BUTACAS_FILA_MAX, BUTACAS_COLUMNA_MAX),
-        Sala("002", "Sala 2", catalogoPeliculas[1], BUTACAS_FILA_MAX, BUTACAS_COLUMNA_MAX)
+        Sala("001", "Sala 1", catalogoPeliculas[0], filasMax, columnasMax, cantidadButacasVip!!),
+        Sala("002", "Sala 2", catalogoPeliculas[1], filasMax, columnasMax, cantidadButacasVip)
     )
+
 
     // Inicializo contenedor de tamaño fijo de clientes/usuarios
     val almacenClientes: Array<Cliente> = Array(CLIENTES_MAX) {
         Cliente(" ", " ", " ", " ", " ", " ",
             Ticket(EstadoTicket.INACTIVO, " ", " ", " ",
-                Array(BUTACAS_FILA_MAX * BUTACAS_COLUMNA_MAX) { Butaca(EstadoButaca.LIBRE, "A", "0", false) }
+                Array(filasMax * columnasMax) { Butaca(EstadoButaca.LIBRE, "A", "0", false) }
             )
         )
     }
 
     // Mostrar los menús
-    menuEleccionUsuario(cine,almacenClientes)
+    menuEleccionUsuario(cine, almacenClientes)
+}
+
+/**
+ * Control de argumentos al iniciar el programa, si son erróneos llamaremos a esta función
+ */
+private fun salirPrograma() {
+    println()
+    println("Debes ejecutar el programa con un número de filas, columnas y butacas VIP que necesites!")
+    println("======================================================================")
+    println("Las ${Color.RED.color}filas${Color.RESET.color} deben comprender entre ${Color.RED.color}1 y 27 (incluídos)${Color.RESET.color}")
+    println("Las ${Color.RED.color}columnas${Color.RESET.color} deben ser como ${Color.RED.color}mínimo 1${Color.RESET.color}")
+    println("Las ${Color.RED.color}butacas VIP${Color.RESET.color} deben ser como ${Color.RED.color}máximo el tamaño máximo de las salas${Color.RESET.color}")
+    println("======================================================================")
+    println("Ejemplo: ${Color.MAGENTA.color}java -jar paquete.jar -filas 6 -columnas 4 -vip 10${Color.RESET.color}")
+    println()
+    exitProcess(1)
 }
 
 /**
@@ -48,8 +124,13 @@ fun main() {
  * @param almacenClientes Array de objetos de la clase Cliente.
  */
 fun menuEleccionUsuario(cine: Array<Sala>, almacenClientes: Array<Cliente>) {
-    while(true) {
-        val eleccion: Int = eleccionTipoUsuario("Iniciar sesión como Administrador, Usuario, o Salir del programa (admin/user/salir):")
+    while (true) {
+        val eleccion: Int =
+            eleccionTipoUsuario(
+                "Iniciar sesión como Administrador, " +
+                        "Usuario, o Salir del programa " +
+                        "\n(${Color.LIGHT_MAGENTA.color}admin${Color.RESET.color}/${Color.LIGHT_YELLOW.color}user${Color.RESET.color}/${Color.RED.color}salir${Color.RESET.color}):"
+            )
         if (eleccion == 1) {
             do {
                 val passCorrect: String = "1234"
@@ -137,7 +218,7 @@ fun repetir(mensaje: String): Boolean {
  * @return "true" si el usuario ha introducido "menu", "false" en caso contrario.
  */
 fun volverAlMenu(): Boolean {
-    println("Introduzca (menu), para volver al menú principal:")
+    println("Introduzca (${Color.LIGHT_RED.color}menu${Color.RESET.color}), para volver al menú principal:")
     val entradaDireccionMenu: String = readln().lowercase()
     if (entradaDireccionMenu == "menu") {
         return true

@@ -4,8 +4,12 @@ import simulacionCine.enum.EstadoTicket
 
 // Clase que representa un cliente una vez realice una reserva o compra
 class Cliente(
-    private var nombre: String, private var apellido: String, var dni: String,
-    private var telefono: String, var email: String, private var tarjetaCredito: String,
+    private var nombre: String,
+    private var apellido: String,
+    var dni: String,
+    private var telefono: String,
+    var email: String,
+    private var tarjetaCredito: String,
     var informacionTicket: Ticket
 ) {
 

@@ -1,6 +1,8 @@
 package simulacionCine
 
+import simulacionCine.enum.Color
 import simulacionCine.models.Sala
+
 
 /**
  * Muestra información detallada del cine y sus salas.
@@ -10,9 +12,9 @@ import simulacionCine.models.Sala
 fun mostrarCine(cine: Array<Sala>) {
     portadaCinesAngel()
     for (i in cine.indices) {
-        println("=======--- SALA -> ${cine[i].id}---=======")
+        println("=======--- ${Color.LIGHT_CYAN.color}SALA -> ${cine[i].id}${Color.RESET.color}---=======")
         println(cine[i])
-        println("========--- PANTALLA ---========")
+        println("========--- ${Color.BLUE.color}PANTALLA${Color.RESET.color}---========")
         cine[i].imprimirMatrizButacas()
         println("")
     }
@@ -38,8 +40,8 @@ fun mostrarCatalogo(cine: Array<Sala>) {
  */
 fun mostrarSala(cine: Array<Sala>, idSala: String) {
     portadaCinesAngel()
-    println("=======--- SALA -> $idSala---=======")
-    println("========--- PANTALLA ---========")
+    println("=======--- ${Color.LIGHT_CYAN.color}SALA -> $idSala${Color.RESET.color}---=======")
+    println("========--- ${Color.BLUE.color}PANTALLA${Color.RESET.color} ---========")
     for (i in cine.indices) {
         if (cine[i].id == idSala) {
             cine[i].imprimirMatrizButacas()
@@ -52,13 +54,11 @@ fun mostrarSala(cine: Array<Sala>, idSala: String) {
  * Muestra la portada del cine.
  */
 fun portadaCinesAngel() {
-    val red = "\u001b[31m"
-    val reset = "\u001b[0m"
-    println("$red======================$reset")
-    println("  ***CINES ANGEL***")
+    println("${Color.LIGHT_BLUE.color}======================${Color.RESET.color}")
+    println(" ${Color.BLUE.color}***${Color.RESET.color}CINES ANGEL${Color.BLUE.color}***${Color.RESET.color}")
     println("Precio = 5,25€/persona")
     println(" VIP = 8,5€/persona")
-    println("$red======================$reset")
+    println("${Color.LIGHT_BLUE.color}======================${Color.RESET.color}")
     println("")
 }
 

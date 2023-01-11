@@ -146,7 +146,7 @@ fun filtradoButacas(cine: Array<Sala>, idSala: String, entradaButaca: String): B
         return false
     }
     // Filtrado para limitar respecto al tamaño de sala
-    if (entradaButaca.substring(1, 2).toInt() > cine[0].cantidaMaxColumnas()) {
+    if (entradaButaca.substring(1, 2).toInt() > cine[0].getTamannoMaxColumnas()) {
         println("ERROR: No existe la butaca seleccionada")
         println("Has asignado una butaca en una posición de columna más grande que la SALA!")
         println("")
@@ -173,12 +173,12 @@ fun filtradoButacas(cine: Array<Sala>, idSala: String, entradaButaca: String): B
     var contadorFilaSeleccionada: Int = 0
     for (element in abecedario) {
         contadorFilaSeleccionada += 1
-        if (contadorFilaSeleccionada > cine[0].cantidaMaxFilas()) {
+        if (contadorFilaSeleccionada > cine[0].getTamannoMaxFilas()) {
             println("ERROR: No existe la butaca seleccionada")
             println("Has asignado una butaca en una posición de fila más grande de la SALA!")
             println("")
             return false
-        } else if (element == filaButaca && contadorFilaSeleccionada <= cine[0].cantidaMaxFilas()) {
+        } else if (element == filaButaca && contadorFilaSeleccionada <= cine[0].getTamannoMaxFilas()) {
             return true
         }
     }
